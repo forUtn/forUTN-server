@@ -1,17 +1,19 @@
 const router = require('express').Router();
-const {Sequelize, QueryTypes, Op} = require('sequelize');
+const { Sequelize, QueryTypes, Op } = require('sequelize');
 const error = require('../../bin/error');
 
 const {
     Input,
     RelInputUser,
-    File, sequelize
+    File,
+    Calification,
+    sequelize
 } = require('../../database');
 
 router.get('/', async (req, res) => {
     try {
-        const inputs = await Input.findAll(); 
-        res.status(200).json(inputs);  
+        const inputs = await Input.findAll();
+        res.status(200).json(inputs);
     } catch (error) {
         error(res, 400, 'Error en el get INPUTS', err);
     }
@@ -23,23 +25,45 @@ router.get('/:id', async (req, res) => {
         let coments = [];
         let urlFiles = [];
         let relFiles = [];
-        if(inputs) {
-            if(inputs.identradapadre == 0)
-            {
+        if (inputs) {
+            if (inputs.identradapadre == 0) {
                 const comentarios = await Input.findAll({
-                    attributes:['contenido', 'idusuario'],
+                    attributes: ['contenido', 'idusuario', 'identrada'],
                     where: {
                         identradapadre: inputs.identrada
                     }
                 });
 
-                comentarios.forEach( a => {
-                    coments.push({
-                        contenido : a.contenido,
-                        usuario: a.idusuario
-                    });
-                });
+                for (var i = 0; i < comentarios.length; i++) {
+                    let a = comentarios[i]
 
+                    const upvotes = await Calification.count({
+                        where: {
+                            identrada: a.identrada,
+                            tipoclasificacion: "U"
+                        }
+                    });
+                    const downvotes = await Calification.count({
+                        where: {
+                            identrada: a.identrada,
+                            tipoclasificacion: "D"
+                        }
+                    });
+
+                    console.log(upvotes, downvotes)
+                    coments.push({
+                        contenido: a.contenido,
+                        usuario: a.idusuario,
+                        upvotes: upvotes,
+                        downvotes: downvotes
+                    });
+                }
+
+                /* comentarios.forEach(a => {
+                }); */
+
+
+                console.log(coments)
                 const relEntradaArchivos = await RelInputUser.findAll({
                     where: {
                         identrada: inputs.identrada
@@ -50,17 +74,17 @@ router.get('/:id', async (req, res) => {
                     relFiles.push(a.idarchivo);
                 });
                 const files = await File.findAll({
-                    where:{
+                    where: {
                         idarchivo: relFiles
                     }
                 });
-                files.forEach( a => {
+                files.forEach(a => {
                     urlFiles.push(a.urlfile);
                 })
             }
-            res.status(200).json({response:'OK', message:inputs, comentarios: coments, archivos: urlFiles});
+            res.status(200).json({ response: 'OK', message: inputs, comentarios: coments, archivos: urlFiles });
         }
-        else error(res,400,'error en el get by id input', e)
+        else error(res, 400, 'error en el get by id input', e)
     } catch (err) {
         console.log(err);
         error(res, 400, 'Error en el get inputs by id', err);
@@ -70,6 +94,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
+        console.log(req)
         //archivos => [4,3,5,6]
         const { identradapadre, idusuario, idmateria, contenido, archivos, titulo } = req.body;
         const inputCreated = await Input.create({
@@ -78,19 +103,19 @@ router.post('/', async (req, res) => {
             identradapadre,
             contenido,
             titulo
-            });
+        });
         archivos.forEach(async id => {
             await RelInputUser.create({
-                idarchivo : id,
-                identrada : inputCreated.identrada,
-                });
+                idarchivo: id,
+                identrada: inputCreated.identrada,
+            });
         })
         res.status(200).json({
             response: 'OK',
             message: inputCreated,
-        });          
+        });
     } catch (e) {
-        error(res,400,'error en el post input', e)
+        error(res, 400, 'error en el post input', e)
     }
 });
 
@@ -100,7 +125,7 @@ router.delete('/:id', async (req, res) => {
         var idFiles = [];
         const identrada = req.params.id;
         const relinputsfiles = await RelInputUser.findAll({
-            where:{
+            where: {
                 identrada
             }
         });
@@ -109,29 +134,29 @@ router.delete('/:id', async (req, res) => {
         });
 
         await File.destroy({
-            where:{
-                idarchivo : idFiles
+            where: {
+                idarchivo: idFiles
             }
         });
 
         await RelInputUser.destroy({
-            where:{
+            where: {
                 identrada
             }
         });
 
         await Input.destroy({
-            where:{
+            where: {
                 identrada
             }
         });
 
         res.status(200).json({
             response: 'OK',
-            message:'Eliminado',
-        });          
+            message: 'Eliminado',
+        });
     } catch (e) {
-        error(res,400,'error en el borrado de Publicacion', e)
+        error(res, 400, 'error en el borrado de Publicacion', e)
     }
 });
 
@@ -147,23 +172,45 @@ router.put('/', async (req, res) => {
             idmateria,
             identradapadre,
             contenido,
-            },
+        },
             {
-                where: 
+                where:
                 {
                     identrada
                 }
             });
-        
+
         res.status(200).json({
             response: 'OK',
-            message:'Publicacion creada',
-        });          
+            message: 'Publicacion creada',
+        });
     } catch (e) {
-        error(res,400,'error en el update input', e)
+        error(res, 400, 'error en el update input', e)
     }
 });
 
+//Modulo de busqueda, se DEBERA mejorar, tomarlo con pinzas
+router.post('/search', async (req, res) => {
+
+    try {
+        const { texto } = req.body;
+        const publicaciones = await Input.findAll({
+            where: {
+                titulo: {
+                    [Sequelize.Op.iLike]: "%" + texto + "%"
+                }
+            }
+        })
+        res.status(200).json({
+            response: 'OK',
+            message: publicaciones,
+        });
+    } catch (e) {
+        error(res, 400, 'error en el search', e)
+    }
+});
+
+module.exports = router;
 //Modulo de busqueda, se DEBERA mejorar, tomarlo con pinzas
 router.post('/search', async(req, res) => {
 
