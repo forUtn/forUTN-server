@@ -104,12 +104,12 @@ router.post('/', async (req, res) => {
             contenido,
             titulo
         });
-        archivos.forEach(async id => {
+        for (const id of archivos) {
             await RelInputUser.create({
                 idarchivo: id,
                 identrada: inputCreated.identrada,
             });
-        })
+        }
         res.status(200).json({
             response: 'OK',
             message: inputCreated,
@@ -185,13 +185,12 @@ router.put('/', async (req, res) => {
             message: 'Publicacion creada',
         });
     } catch (e) {
-        error(res, 400, 'error en el update input', e)
+        error(res, 400, 'error en el update input', e);
     }
 });
 
 //Modulo de busqueda, se DEBERA mejorar, tomarlo con pinzas
 router.post('/search', async (req, res) => {
-
     try {
         const { texto } = req.body;
         const publicaciones = await Input.findAll({
@@ -200,35 +199,13 @@ router.post('/search', async (req, res) => {
                     [Sequelize.Op.iLike]: "%" + texto + "%"
                 }
             }
-        })
+        });
         res.status(200).json({
             response: 'OK',
             message: publicaciones,
         });
     } catch (e) {
-        error(res, 400, 'error en el search', e)
-    }
-});
-
-module.exports = router;
-//Modulo de busqueda, se DEBERA mejorar, tomarlo con pinzas
-router.post('/search', async(req, res) => {
-
-    try{
-        const { texto } = req.body;
-        const publicaciones = await Input.findAll({
-            where: {
-                titulo:{
-                    [Sequelize.Op.iLike]: "%"+texto+"%"
-                }
-            }
-        })
-        res.status(200).json({
-            response: 'OK',
-            message:publicaciones,
-        });
-    }catch(e){
-        error(res,400,'error en el search', e)
+        error(res, 400, 'error en el search', e);
     }
 });
 
