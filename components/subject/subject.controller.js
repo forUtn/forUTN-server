@@ -25,7 +25,8 @@ router.get('/:id', async (req, res) => {
                 where: {
                     idmateria : subject.idmateria,
                     identradapadre: 0
-                }
+                },
+                order: [["createdAt", "DESC"]]
             });
             res.status(200).json({response:'OK', subject, inputs});
         }

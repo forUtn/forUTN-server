@@ -47,28 +47,7 @@ describe('Testing POSTS user', () => {
 
 });
 
-
-
-
 describe('Testing POSTS INPUTS', () => {
-    // it('Should return status -> 200 and the JSON with input the message:Publicacion Creada', async () => {
-    //     const newInput = {
-    //         idusuario: 1,
-    //         idmateria: 1,
-    //         identradapadre: 0,
-    //         contenido: 'Esto es un contenido creado con el test',
-    //         titulo:'Esto es un titulo por el TEST',
-    //         archivos: []
-    //     };
-    //     const r = await request(app)
-    //         .post("/inputs")
-    //         .set("Accept", "application/json")
-    //         .send(newInput)
-    //         .expect(200);
-
-    //     console.log(r.body.message);
-    // });
-
     it('Should return status -> 200 and the JSON with input the message', async () => {
         
         const newInput = {

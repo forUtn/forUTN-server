@@ -23,8 +23,7 @@ router.get('/:id', async (req, res) => {
     try {
         var inputs = await Input.findByPk(req.params.id);
         let coments = [];
-        let urlFiles = [];
-        let relFiles = [];
+        let url;
         if (inputs) {
             if (inputs.identradapadre == 0) {
                 const comentarios = await Input.findAll({
@@ -50,7 +49,6 @@ router.get('/:id', async (req, res) => {
                         }
                     });
 
-                    console.log(upvotes, downvotes)
                     coments.push({
                         contenido: a.contenido,
                         usuario: a.idusuario,
@@ -59,30 +57,24 @@ router.get('/:id', async (req, res) => {
                     });
                 }
 
-                /* comentarios.forEach(a => {
-                }); */
 
-
-                console.log(coments)
                 const relEntradaArchivos = await RelInputUser.findAll({
                     where: {
                         identrada: inputs.identrada
                     }
                 });
 
-                relEntradaArchivos.forEach(a => {
-                    relFiles.push(a.idarchivo);
-                });
-                const files = await File.findAll({
-                    where: {
-                        idarchivo: relFiles
-                    }
-                });
-                files.forEach(a => {
-                    urlFiles.push(a.urlfile);
-                })
+                if(relEntradaArchivos[0]?.idarchivo){
+                    const files = await File.findAll({
+                        where: {
+                            idarchivo: relEntradaArchivos[0].idarchivo
+                        }
+                    });
+                    url = files[0]?.urlfile;
+                }
+
             }
-            res.status(200).json({ response: 'OK', message: inputs, comentarios: coments, archivos: urlFiles });
+            res.status(200).json({ response: 'OK', message: inputs, comentarios: coments, archivo: url});
         }
         else error(res, 400, 'error en el get by id input', e)
     } catch (err) {
@@ -94,25 +86,28 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        console.log(req)
-        //archivos => [4,3,5,6]
-        const { identradapadre, idusuario, idmateria, contenido, archivos, titulo } = req.body;
+        const { identradapadre, idusuario, idmateria, cont, titulo, nombrePdf, archivoPdf } = req.body;
+
         const inputCreated = await Input.create({
             idusuario,
             idmateria,
             identradapadre,
-            contenido,
-            titulo
+            contenido: cont,
+            titulo,
         });
-        for (const id of archivos) {
-            await RelInputUser.create({
-                idarchivo: id,
-                identrada: inputCreated.identrada,
-            });
-        }
+
+        const archivoData = await File.create({
+            urlfile: archivoPdf,
+            tipo : 'p'
+        })
+
+        await RelInputUser.create({
+            idarchivo: archivoData.idarchivo,
+            identrada: inputCreated.identrada,
+        });
         res.status(200).json({
             response: 'OK',
-            message: inputCreated,
+            //message: inputCreated,
         });
     } catch (e) {
         error(res, 400, 'error en el post input', e)
@@ -179,7 +174,6 @@ router.put('/', async (req, res) => {
                     identrada
                 }
             });
-
         res.status(200).json({
             response: 'OK',
             message: 'Publicacion creada',
@@ -198,7 +192,8 @@ router.post('/search', async (req, res) => {
                 titulo: {
                     [Sequelize.Op.iLike]: "%" + texto + "%"
                 }
-            }
+            },
+            order: [["createdAt", "DESC"]]
         });
         res.status(200).json({
             response: 'OK',
