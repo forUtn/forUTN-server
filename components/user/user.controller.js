@@ -6,6 +6,7 @@ const {
     User,
     Profile
 } = require('../../database')
+const error = require("../../bin/error");
 
 
 router.get('/', async (req, res) => {
@@ -22,7 +23,36 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const users = await User.findByPk(req.params.id);
-        if(users) res.status(200).json({status:200, message:users});
+        if(users) {
+            const username = await Profile.findByPk(users.idusuario);
+            let data = {
+                users,
+                username
+            }
+            res.status(200).json({status: 200, message: data});
+        }
+        else res.status(404).json({status: 404, message: 'Empty'});
+    } catch (err) {
+        error(res, 400, 'Error en el get user by id', err);
+    }
+});
+
+router.get('/email/:email', async (req, res) => {
+    try {
+        const user = await User.findAll({
+            where:{
+                mail:req.params.email
+            }
+        });
+        const usuario = user[0];
+        const username = await Profile.findByPk(usuario.idusuario);
+
+        const data = {
+            user : usuario,
+            username: username
+        }
+
+        if(data) res.status(200).json({status:200, message:data});
         else res.status(404).json({status: 404, message: 'Empty'});
     } catch (err) {
         error(res, 400, 'Error en el get user by id', err);

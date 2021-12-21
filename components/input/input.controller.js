@@ -7,7 +7,7 @@ const {
     RelInputUser,
     File,
     Calification,
-    sequelize
+    sequelize, Profile, Subject
 } = require('../../database');
 
 router.get('/', async (req, res) => {
@@ -49,11 +49,14 @@ router.get('/:id', async (req, res) => {
                         }
                     });
 
+                    const username = await Profile.findByPk(a.idusuario);
+                    const nombreUsuario = username.nombreperfil
                     coments.push({
                         contenido: a.contenido,
                         usuario: a.idusuario,
                         upvotes: upvotes,
-                        downvotes: downvotes
+                        downvotes: downvotes,
+                        nombreUsuario
                     });
                 }
 
@@ -72,7 +75,6 @@ router.get('/:id', async (req, res) => {
                     });
                     url = files[0]?.urlfile;
                 }
-
             }
             res.status(200).json({ response: 'OK', message: inputs, comentarios: coments, archivo: url});
         }
@@ -86,6 +88,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
+        console.log(req.body)
         const { identradapadre, idusuario, idmateria, cont, titulo, nombrePdf, archivoPdf } = req.body;
 
         const inputCreated = await Input.create({
@@ -154,6 +157,28 @@ router.delete('/:id', async (req, res) => {
         error(res, 400, 'error en el borrado de Publicacion', e)
     }
 });
+
+router.get('/user/:id', async (req, res) => {
+    try {
+        const inputs = await Input.findAll({
+            where: {
+                idusuario : req.params.id,
+                identradapadre: 0
+            },
+            order: [["createdAt", "DESC"]]
+        });
+        res.status(200).json({response:'OK', inputs});
+    }catch (err) {
+        error(res, 400, 'Error en el get materias by id', err);
+    }
+});
+
+
+
+
+
+
+
 
 
 
