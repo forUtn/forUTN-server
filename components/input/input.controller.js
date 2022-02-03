@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
                 });
 
                 for (var i = 0; i < comentarios.length; i++) {
-                    let a = comentarios[i]
+                    let a = comentarios[i];
 
                     const upvotes = await Calification.count({
                         where: {
@@ -52,6 +52,7 @@ router.get('/:id', async (req, res) => {
                     const username = await Profile.findByPk(a.idusuario);
                     const nombreUsuario = username.nombreperfil
                     coments.push({
+                        idcomentario: a.identrada,
                         contenido: a.contenido,
                         usuario: a.idusuario,
                         upvotes: upvotes,
@@ -88,7 +89,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        console.log(req.body)
         const { identradapadre, idusuario, idmateria, cont, titulo, nombrePdf, archivoPdf } = req.body;
 
         const inputCreated = await Input.create({
@@ -172,15 +172,6 @@ router.get('/user/:id', async (req, res) => {
         error(res, 400, 'Error en el get materias by id', err);
     }
 });
-
-
-
-
-
-
-
-
-
 
 //Modificar un POST O COMENTARIO
 router.put('/', async (req, res) => {

@@ -6,6 +6,7 @@ const {
     Calification,
     Input
 } = require('../../database')
+const error = require("../../bin/error");
 
 
 router.get('/', async (req, res) => {
@@ -43,22 +44,49 @@ router.post('/', async (req, res) => {
                 idusuario
             }
         });
-        
-        if(calificationExist)
-        {
-            await Calification.destroy({
-                where:{
-                    identrada,
-                    idusuario
-                }
+
+        const myLike = await Input.findByPk(identrada);
+
+        if(myLike.idusuario == idusuario) {
+            return res.status(200).json({
+                response: 'No permitido',
+                message: 'No puedes calificar tu propio contenido',
             });
+        }
+
+        if(calificationExist[0])
+        {
+            if(calificationExist[0].tipoclasificacion === tipoclasificacion) {
+                await Calification.destroy({
+                    where:{
+                        identrada,
+                        idusuario
+                    }
+                });
+
+                return res.status(200).json({
+                    response: 'OK',
+                    message:'Calificacion eliminada ya que existia una previamente',
+                });
+            }
+            await Calification.update({
+                tipoclasificacion,
+            },
+                {
+                    where:{
+                        identrada,
+                        idusuario,
+                    }
+                }
+            );
 
             return res.status(200).json({
                 response: 'OK',
-                message:'Calificacion eliminada ya que existia una previamente',
+                message:'Calificacion updateada porque que existia su opuesto',
             }); 
         }
-        const inputCreated = await Input.create({
+
+        await Calification.create({
             identrada,
             idusuario,
             tipoclasificacion
