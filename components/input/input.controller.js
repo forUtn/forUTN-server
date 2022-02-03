@@ -110,7 +110,7 @@ router.post('/', async (req, res) => {
         });
         res.status(200).json({
             response: 'OK',
-            //message: inputCreated,
+            message: inputCreated,
         });
     } catch (e) {
         error(res, 400, 'error en el post input', e)

@@ -12,7 +12,7 @@ describe('TESTING GETS USERS', () => {
     });
 
     it('Return 404 because not found a user', async () => {
-        await request(app).get("/users/12").expect(404);
+        await request(app).get("/users/9999").expect(404);
     });
 });
 
@@ -63,22 +63,6 @@ describe('Testing POSTS INPUTS', () => {
             .set("Accept", "application/json")
             .send(newInput)
             .expect(200);
-
-        const newInputC = {
-            identradapadre: r.body.message.identrada,
-            idusuario: 1,
-            idmateria: 0,
-            contenido: 'Esto es un comentario  creado con el test',
-            titulo: '',
-            archivos: []
-        };
-        var r = await request(app)
-            .post("/inputs")
-            .set("Accept", "application/json")
-            .send(newInputC)
-            .expect(200);
-
-        console.log(r.body.message)
     });
 });
 
