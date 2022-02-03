@@ -10,7 +10,9 @@ const {
 
 router.get('/', async (req, res) => {
     try {
-        const subjects = await Subject.findAll();
+        const subjects = await Subject.findAll({
+            order: [["nombre", "ASC"]]
+        });
         res.status(200).json(subjects);          
     } catch (error) {
         error(res, 400, 'Error en el get materias', err);
