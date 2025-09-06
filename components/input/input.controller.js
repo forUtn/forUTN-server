@@ -7,7 +7,7 @@ const {
     RelInputUser,
     File,
     Calification,
-    sequelize, User, Subject
+    sequelize, User, Subject,   
 } = require('../../database');
 
 router.get('/', async (req, res) => {
@@ -161,13 +161,22 @@ router.delete('/:id', async (req, res) => {
 
 router.get('/user/:id', async (req, res) => {
     try {
-        const inputs = await Input.findAll({
+        let inputs = await Input.findAll({
             where: {
                 idusuario : req.params.id,
                 identradapadre: 0
             },
             order: [["createdAt", "DESC"]]
         });
+
+        inputs= inputs.map(input => input.toJSON())
+
+        for (let i = 0; i < inputs.length; i++) {
+            const element = inputs[i];
+            const usuario = await User.findByPk(element.idusuario);
+            inputs[i].usuario = usuario.username;
+        }
+
         res.status(200).json({response:'OK', inputs});
     }catch (err) {
         error(res, 400, 'Error en el get materias by id', err);
