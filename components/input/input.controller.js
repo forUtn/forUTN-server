@@ -25,6 +25,7 @@ router.get('/:id', async (req, res) => {
         let coments = [];
         let url;
         if (inputs) {
+            const op = await User.findByPk(inputs.idusuario);
             if (inputs.identradapadre == 0) {
                 const comentarios = await Input.findAll({
                     attributes: ['contenido', 'idusuario', 'identrada'],
@@ -77,7 +78,7 @@ router.get('/:id', async (req, res) => {
                     url = files[0]?.urlfile;
                 }
             }
-            res.status(200).json({ response: 'OK', message: inputs, comentarios: coments, archivo: url});
+            res.status(200).json({ response: 'OK', op: op.username, message: inputs, comentarios: coments, archivo: url});
         }
         else error(res, 400, 'error en el get by id input', e)
     } catch (err) {
