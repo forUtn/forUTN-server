@@ -7,7 +7,7 @@ const {
     RelInputUser,
     File,
     Calification,
-    sequelize, Profile, Subject
+    sequelize, User, Subject
 } = require('../../database');
 
 router.get('/', async (req, res) => {
@@ -49,8 +49,8 @@ router.get('/:id', async (req, res) => {
                         }
                     });
 
-                    const username = await Profile.findByPk(a.idusuario);
-                    const nombreUsuario = username.nombreperfil
+                    const username = await User.findByPk(a.idusuario);
+                    const nombreUsuario = username.username
                     coments.push({
                         idcomentario: a.identrada,
                         contenido: a.contenido,
