@@ -204,7 +204,7 @@ router.put('/', async (req, res) => {
 router.post('/search', async (req, res) => {
     try {
         const { texto } = req.body;
-        const publicaciones = await Input.findAll({
+        let publicaciones = await Input.findAll({
             where: {
                 titulo: {
                     [Sequelize.Op.iLike]: "%" + texto + "%"
@@ -212,6 +212,15 @@ router.post('/search', async (req, res) => {
             },
             order: [["createdAt", "DESC"]]
         });
+
+        publicaciones= publicaciones.map(publicacion => publicacion.toJSON())
+
+        for (let i = 0; i < publicaciones.length; i++) {
+            const element = publicaciones[i];
+            const usuario = await User.findByPk(element.idusuario);
+            publicaciones[i].usuario = usuario.username;
+        }
+
         res.status(200).json({
             response: 'OK',
             message: publicaciones,
