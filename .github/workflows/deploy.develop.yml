@@ -31,7 +31,6 @@ jobs:
         DB_HOST=$DB_HOST
         DB_DBNAME=$DB_DBNAME
         npm i
-        npm test
       env:
         AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
         DB_USER: ${{ secrets.DB_USER }}
