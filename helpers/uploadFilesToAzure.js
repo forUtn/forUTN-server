@@ -2,7 +2,7 @@ const azureStorage = require('azure-storage');
 const blobService = azureStorage.createBlobService(process.env.AZURE_STORAGE_CONNECTION_STRING);
 const containerName = 'forutn';
 const getStream = require('into-stream');
-const blobUrl = 'https://forutn.blob.core.windows.net/forutn';
+const blobUrl = 'https://forutntest.blob.core.windows.net/forutn-container';
 
 const getBlobName = originalName => {
     const identifier = Math.random().toString().replace(/0\./,'');
