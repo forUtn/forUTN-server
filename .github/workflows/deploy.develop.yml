@@ -1,24 +1,19 @@
-name: ForUTN Github Action CI Develop
+name: ForUTN Github Action CI/CD
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the master branch
   push:
     branches:
       - feature
+      - main  # Agregar main para deploy
   pull_request:
     branches:
       - develop
 
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [14.x]
-
+        node-version: [20.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -44,4 +39,33 @@ jobs:
         DB_PORT: ${{ secrets.DB_PORT }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_DBNAME: ${{ secrets.DB_DBNAME }}
-      
+    
+    # Subir artefacto para el deploy
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      with:
+        name: node-app
+        path: .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    # Solo hacer deploy cuando sea push a main (no en PRs)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v3
+      with:
+        name: node-app
+
+    - name: 'Deploy to Azure Web App'
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'back-forutn'
+        slot-name: 'Production'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
