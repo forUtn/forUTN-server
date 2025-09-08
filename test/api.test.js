@@ -1,32 +1,6 @@
 const request = require("supertest");
 const app = require("../app");
 
-describe('TESTING GETS USERS', () => {
-    it('Return 200 and all JSON users', async () => {
-        await request(app).get("/users").expect(200);
-    });
-
-    it('Return 200 and the user with idusuario = 1', async () => {
-        const r = await request(app).get("/users/1").expect(200);
-        console.log(r.body.message);
-    });
-
-    it('Return 404 because not found a user', async () => {
-        await request(app).get("/users/9999").expect(404);
-    });
-});
-
-
-describe('TESTING GETS INPUTS', () => {
-    it('Return 200 and the JSON with all inputs created at the moment', async () => {
-        await request(app).get("/inputs").expect(200);
-    });
-    
-    it('should show the input with id = 1', async () => {
-        await request(app).get("/inputs/1").expect(200);
-    });
-});
-
 
 describe('Testing POSTS user', () => {
     it('Should return status -> 200 and the JSON with user created', async () => {
@@ -66,9 +40,31 @@ describe('Testing POSTS INPUTS', () => {
     });
 });
 
+describe('TESTING GETS USERS', () => {
+    it('Return 200 and all JSON users', async () => {
+        await request(app).get("/users").expect(200);
+    });
+
+    it('Return 200 and the user with idusuario = 1', async () => {
+        const r = await request(app).get("/users/1").expect(200);
+        console.log(r.body.message);
+    });
+
+    it('Return 404 because not found a user', async () => {
+        await request(app).get("/users/9999").expect(404);
+    });
+});
 
 
-
+describe('TESTING GETS INPUTS', () => {
+    it('Return 200 and the JSON with all inputs created at the moment', async () => {
+        await request(app).get("/inputs").expect(200);
+    });
+    
+    it('should show the input with id = 1', async () => {
+        await request(app).get("/inputs/1").expect(200);
+    });
+});
 
 describe('Testing DELETE INPUTS', () => {
     it('Should return status -> 200 and the JSON message:Eliminado', async () => {
