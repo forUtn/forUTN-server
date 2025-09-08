@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - feature
-      - main  # Agregar main para deploy
+      - main
   pull_request:
     branches:
       - develop
@@ -16,30 +16,26 @@ jobs:
         node-version: [20.x]
     steps:
     - uses: actions/checkout@v4
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    
     - run: npm ci
     - run: npm run build --if-present
-    - run: |
-        AZURE_STORAGE_CONNECTION_STRING=$AZURE_STORAGE_CONNECTION_STRING
-        DB_USER=$DB_USER
-        DB_PWD=$DB_PWD
-        DB_PORT=$DB_PORT
-        DB_HOST=$DB_HOST
-        DB_DBNAME=$DB_DBNAME
-        npm i
-      env:
-        AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PWD: ${{ secrets.DB_PWD }}
-        DB_PORT: ${{ secrets.DB_PORT }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        DB_DBNAME: ${{ secrets.DB_DBNAME }}
     
-    # Subir artefacto para el deploy
+    # - name: Run tests
+    #   run: npm test
+    #   env:
+    #     AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+    #     DB_USER: ${{ secrets.DB_USER }}
+    #     DB_PWD: ${{ secrets.DB_PWD }}
+    #     DB_PORT: ${{ secrets.DB_PORT }}
+    #     DB_HOST: ${{ secrets.DB_HOST }}
+    #     DB_DBNAME: ${{ secrets.DB_DBNAME }}
+   
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v4
       with:
@@ -53,14 +49,17 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
+    
     steps:
     - name: Download artifact from build job
       uses: actions/download-artifact@v4
       with:
         name: node-app
 
-    - name: 'Deploy to Azure Web App'
+    - name: Unzip artifact for deployment
+      run: unzip release.zip
+
+    - name: Deploy to Azure Web App
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v3
       with:
