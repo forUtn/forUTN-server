@@ -4,7 +4,7 @@ const {Sequelize, QueryTypes, Op} = require('sequelize');
 const multer = require('multer');
 const inMemoryStorage = multer.memoryStorage();
 const updateStrategy = multer({ storage: inMemoryStorage}).any('images');
-//const uploadFilesToAzure = require('../../helpers/uploadFilesToAzure');
+const uploadFilesToAzure = require('../../helpers/uploadFilesToAzure');
 const error = require('../../bin/error');
 const {
     File
