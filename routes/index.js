@@ -27,7 +27,15 @@ router.use('/relInputUsers', relInputUserController);
 router.use('/inputs', inputUserController);
 router.use('/subjects', subjectController);
 
-
-
+// Health Check endpoint
+router.get('/health', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'ForUTN Server is running',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        version: '1.0.0'
+    });
+});
 
 module.exports = router;
