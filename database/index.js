@@ -5,9 +5,12 @@ const constants = require('../constants');
 const sequelize = new Sequelize(
     `postgres://${constants.DB_USER}:${constants.DB_PWD}@${constants.DB_HOST}:${constants.DB_PORT}/${constants.DB_DBNAME}`,
     {
-        dialectOptions : {
-            ssl : false
-        }    
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        }
     }
 );
 
