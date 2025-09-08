@@ -3,7 +3,7 @@ require('dotenv').config();
 const {Sequelize, QueryTypes, Op} = require('sequelize');
 const multer = require('multer');
 const inMemoryStorage = multer.memoryStorage();
-const updateStrategy = multer({ storage: inMemoryStorage}).any('images');
+const updateStrategy = multer({ storage: inMemoryStorage}).any('file');
 const uploadFilesToAzure = require('../../helpers/uploadFilesToAzure');
 const error = require('../../bin/error');
 const {
@@ -12,7 +12,11 @@ const {
 
 router.get('/', async (req, res) => {
     try {
-     
+        const files = await File.findAll();
+        res.status(200).json({
+            response: 'OK',
+            files: files
+        });
     } catch (error) {
         console.log("Error en el GET FILES",error);
     }
