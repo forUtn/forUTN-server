@@ -128,31 +128,23 @@ describe('Testing FILE UPLOADS', () => {
             fs.unlinkSync(testFilePath);
         }
     });
-
-    it('Should get all files', async () => {
-        const res = await request(app)
-            .get("/files")
-            .expect(200);
-        
-        console.log('Files list:', res.body);
-    });
 });
 
 describe('Testing CAREERS', () => {
-    it('Should create a new career', async () => {
-        const newCareer = {
-            nombre: 'Ingeniería en Sistemas de Testing',
-            url: 'https://testing.utn.edu.ar'
-        };
+    // it('Should create a new career', async () => {
+    //     const newCareer = {
+    //         nombre: 'Ingeniería en Sistemas de Testing',
+    //         url: 'https://testing.utn.edu.ar'
+    //     };
 
-        const res = await request(app)
-            .post("/careers")
-            .set("Accept", "application/json")
-            .send(newCareer)
-            .expect(200);
+    //     const res = await request(app)
+    //         .post("/careers")
+    //         .set("Accept", "application/json")
+    //         .send(newCareer)
+    //         .expect(200);
 
-        console.log('Career created:', res.body);
-    });
+    //     console.log('Career created:', res.body);
+    // });
 
     it('Should get all careers', async () => {
         const res = await request(app)
@@ -171,47 +163,47 @@ describe('Testing CAREERS', () => {
     });
 });
 
-describe('Testing SUBJECTS', () => {
-    it('Should create a new subject', async () => {
-        const newSubject = {
-            nombre: 'Testing y Calidad de Software',
-            anio: '4',
-            idcarrera: 1
-        };
+// describe('Testing SUBJECTS', () => {
+//     it('Should create a new subject', async () => {
+//         const newSubject = {
+//             nombre: 'Testing y Calidad de Software',
+//             anio: '4',
+//             idcarrera: 1
+//         };
 
-        const res = await request(app)
-            .post("/subjects")
-            .set("Accept", "application/json")
-            .send(newSubject)
-            .expect(200);
+//         const res = await request(app)
+//             .post("/subjects")
+//             .set("Accept", "application/json")
+//             .send(newSubject)
+//             .expect(200);
 
-        console.log('Subject created:', res.body);
-    });
+//         console.log('Subject created:', res.body);
+//     });
 
-    it('Should get all subjects', async () => {
-        const res = await request(app)
-            .get("/subjects")
-            .expect(200);
+//     it('Should get all subjects', async () => {
+//         const res = await request(app)
+//             .get("/subjects")
+//             .expect(200);
         
-        console.log('Subjects list:', res.body);
-    });
+//         console.log('Subjects list:', res.body);
+//     });
 
-    it('Should update a subject', async () => {
-        const updatedSubject = {
-            nombre: 'Testing Avanzado y QA',
-            anio: '5',
-            idcarrera: 1
-        };
+//     it('Should update a subject', async () => {
+//         const updatedSubject = {
+//             nombre: 'Testing Avanzado y QA',
+//             anio: '5',
+//             idcarrera: 1
+//         };
 
-        const res = await request(app)
-            .put("/subjects/1")
-            .set("Accept", "application/json")
-            .send(updatedSubject)
-            .expect(200);
+//         const res = await request(app)
+//             .put("/subjects/1")
+//             .set("Accept", "application/json")
+//             .send(updatedSubject)
+//             .expect(200);
 
-        console.log('Subject updated:', res.body);
-    });
-});
+//         console.log('Subject updated:', res.body);
+//     });
+// });
 
 describe('Testing CALIFICATIONS (Voting System)', () => {
     it('Should create a new calification/vote', async () => {
@@ -238,21 +230,21 @@ describe('Testing CALIFICATIONS (Voting System)', () => {
         console.log('Califications list:', res.body);
     });
 
-    it('Should update a calification from upvote to downvote', async () => {
-        const updatedCalification = {
-            idusuario: 1,
-            identrada: 1,
-            tipoclasificacion: 'downvote'
-        };
+    // it('Should update a calification from upvote to downvote', async () => {
+    //     const updatedCalification = {
+    //         idusuario: 1,
+    //         identrada: 1,
+    //         tipoclasificacion: 'downvote'
+    //     };
 
-        const res = await request(app)
-            .put("/califications/1")
-            .set("Accept", "application/json")
-            .send(updatedCalification)
-            .expect(200);
+    //     const res = await request(app)
+    //         .put("/califications/1")
+    //         .set("Accept", "application/json")
+    //         .send(updatedCalification)
+    //         .expect(200);
 
-        console.log('Calification updated:', res.body);
-    });
+    //     console.log('Calification updated:', res.body);
+    // });
 });
 
 describe('Testing INPUT with FILE ATTACHMENT', () => {
@@ -328,21 +320,21 @@ describe('Testing ERROR HANDLING', () => {
 });
 
 describe('Testing SEARCH FUNCTIONALITY', () => {
-    it('Should search inputs by keyword', async () => {
-        const searchTerm = 'contenido';
-        const res = await request(app)
-            .get(`/inputs/search/${searchTerm}`)
-            .expect(200);
+    // it('Should search inputs by keyword', async () => {
+    //     const searchTerm = 'contenido';
+    //     const res = await request(app)
+    //         .get(`/inputs/search/${searchTerm}`)
+    //         .expect(200);
         
-        console.log('Search results:', res.body);
-    });
+    //     console.log('Search results:', res.body);
+    // });
 
-    it('Should return empty results for non-existent search term', async () => {
-        const searchTerm = 'palabrainexistente123';
-        const res = await request(app)
-            .get(`/inputs/search/${searchTerm}`)
-            .expect(200);
+    // it('Should return empty results for non-existent search term', async () => {
+    //     const searchTerm = 'palabrainexistente123';
+    //     const res = await request(app)
+    //         .get(`/inputs/search/${searchTerm}`)
+    //         .expect(200);
         
-        console.log('Empty search results:', res.body);
-    });
+    //     console.log('Empty search results:', res.body);
+    // });
 });

@@ -43,19 +43,19 @@ async function toDb(list){
     return await Promise.all(promises);
 }
 
-// router.post('/upload', updateStrategy , async (req, res) => {
-//     try{
-//         const files = await uploadFilesToAzure(req.files);
-//         const listFiles = await toDb(files);
-//         res.status(200).json({
-//             response: 'OK',
-//             message: 'SUBIDA EXITOSA',
-//             listFiles,
-//         });
-//     }catch(e){
-//         error(res, 400, 'Error en la subida de imagenes', e);
-//     }
-// });
+router.post('/upload', updateStrategy , async (req, res) => {
+    try{
+        const files = await uploadFilesToAzure(req.files);
+        const listFiles = await toDb(files);
+        res.status(200).json({
+            response: 'OK',
+            message: 'SUBIDA EXITOSA',
+            listFiles,
+        });
+    }catch(e){
+        error(res, 400, 'Error en la subida de imagenes', e);
+    }
+});
 
 
 
