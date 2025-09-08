@@ -38,4 +38,14 @@ router.get('/health', (req, res) => {
     });
 });
 
+router.get('/', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'Welcome to the ForUTN API',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        version: '1.0.0'
+    });
+});
+
 module.exports = router;
