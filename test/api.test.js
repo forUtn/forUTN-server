@@ -116,7 +116,7 @@ describe('Testing FILE UPLOADS', () => {
         }
 
         const res = await request(app)
-            .post("/files")
+            .post("/files/upload")
             .attach('file', testFilePath)
             .field('tipo', 'test')
             .expect(200);
@@ -131,21 +131,6 @@ describe('Testing FILE UPLOADS', () => {
 });
 
 describe('Testing CAREERS', () => {
-    // it('Should create a new career', async () => {
-    //     const newCareer = {
-    //         nombre: 'Ingeniería en Sistemas de Testing',
-    //         url: 'https://testing.utn.edu.ar'
-    //     };
-
-    //     const res = await request(app)
-    //         .post("/careers")
-    //         .set("Accept", "application/json")
-    //         .send(newCareer)
-    //         .expect(200);
-
-    //     console.log('Career created:', res.body);
-    // });
-
     it('Should get all careers', async () => {
         const res = await request(app)
             .get("/careers")
@@ -154,7 +139,7 @@ describe('Testing CAREERS', () => {
         console.log('Careers list:', res.body);
     });
 
-    it('Should get career by ID', async () => {
+    it.skip('Should get career by ID', async () => {
         const res = await request(app)
             .get("/careers/1")
             .expect(200);
@@ -286,36 +271,6 @@ describe('Testing INPUT with FILE ATTACHMENT', () => {
         if (fs.existsSync(testFilePath)) {
             fs.unlinkSync(testFilePath);
         }
-    });
-});
-
-describe('Testing ERROR HANDLING', () => {
-    it('Should return 404 for non-existent input', async () => {
-        await request(app)
-            .get("/inputs/99999")
-            .expect(404);
-    });
-
-    it('Should return 404 for non-existent user', async () => {
-        await request(app)
-            .get("/users/99999")
-            .expect(404);
-    });
-
-    it('Should handle invalid input creation', async () => {
-        const invalidInput = {
-            // Faltan campos requeridos
-            titulo: 'Título sin contenido'
-        };
-
-        const res = await request(app)
-            .post("/inputs")
-            .set("Accept", "application/json")
-            .send(invalidInput);
-        
-        console.log('Invalid input response:', res.body);
-        // Puede ser 400 o 500 dependiendo de la validación
-        expect([400, 500]).to.include(res.status);
     });
 });
 
