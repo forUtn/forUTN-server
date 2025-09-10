@@ -222,7 +222,7 @@ router.post('/search', async (req, res) => {
             order: [["createdAt", "DESC"]]
         });
 
-        publicaciones= publicaciones.map(publicacion => publicacion.toJSON())
+        publicaciones = publicaciones.map(publicacion => publicacion.toJSON())
 
         for (let i = 0; i < publicaciones.length; i++) {
             const element = publicaciones[i];
