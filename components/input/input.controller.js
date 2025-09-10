@@ -187,7 +187,7 @@ router.get('/user/:id', async (req, res) => {
 router.put('/', async (req, res) => {
     try {
         const { identrada, identradapadre, idusuario, idmateria, contenido, titulo } = req.body;
-        const inputCreated = await Input.update({
+        await Input.update({
             idusuario,
             titulo,
             idmateria,
