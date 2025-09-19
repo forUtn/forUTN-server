@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
 
     const myLike = await Input.findByPk(identrada);
 
-    if(myLike.idusuario === idusuario) {
+    if(parseInt(myLike.idusuario) === parseInt(idusuario)) {
       return res.status(200).json({
         response: 'No permitido',
         message: 'No puedes calificar tu propio contenido'
