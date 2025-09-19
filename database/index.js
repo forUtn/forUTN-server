@@ -42,6 +42,7 @@ const RelInputUser = RelInputUserModel(sequelize, Sequelize);
 const Subject = SubjectModel(sequelize, Sequelize);
 
 sequelize.sync({ force : false }).then(() => {
+  // eslint-disable-next-line no-console
   console.log('*----------------------Tablas sincronizadas------------------------*');
 });
 

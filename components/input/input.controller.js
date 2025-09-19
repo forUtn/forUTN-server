@@ -90,7 +90,8 @@ router.post('/', async (req, res) => {
   try {
     const { identradapadre, idusuario, idmateria, cont, titulo, archivoPdf } = req.body;
 
-    if (!titulo || titulo.length === 0) {
+    //Esto representa a un POST
+    if ((!titulo || titulo.length === 0) && !identradapadre) {
       return error(res, 400, 'Titulo vacio');
     }
 
