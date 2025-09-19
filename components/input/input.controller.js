@@ -87,10 +87,21 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-
 router.post('/', async (req, res) => {
     try {
         const { identradapadre, idusuario, idmateria, cont, titulo, nombrePdf, archivoPdf } = req.body;
+
+        if (!titulo || titulo.length === 0) {
+            return error(res, 400, 'Titulo vacio');
+        }
+
+        if (!cont || cont.length === 0) {
+            return error(res, 400, 'Contenido vacio');
+        }
+
+        if (cont.length > 4000) {
+            return error(res, 400, 'El cuerpo de la publicacion excede el limite de la longitud');
+        }
 
         const inputCreated = await Input.create({
             idusuario,
@@ -123,6 +134,12 @@ router.delete('/:id', async (req, res) => {
     try {
         var idFiles = [];
         const identrada = req.params.id;
+        const publicacion = await Input.findByPk(identrada);
+
+        if (!publicacion) {
+            return error(res, 400, 'Id no encontrado');
+        }
+
         const relinputsfiles = await RelInputUser.findAll({
             where: {
                 identrada
@@ -213,6 +230,9 @@ router.put('/', async (req, res) => {
 router.post('/search', async (req, res) => {
     try {
         const { texto } = req.body;
+        if (!texto || texto.length === 0) {
+            return error(res, 400, 'Texto vacio');
+        }
         let publicaciones = await Input.findAll({
             where: {
                 titulo: {
