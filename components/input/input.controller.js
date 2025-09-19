@@ -88,14 +88,15 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { identradapadre, idusuario, idmateria, cont, titulo, archivoPdf } = req.body;
+    const { identradapadre = 0, idusuario, idmateria, cont, titulo, archivoPdf } = req.body;
 
-    //Esto representa a un POST
-    if ((!titulo || titulo.length === 0) && !identradapadre) {
-      return error(res, 400, 'Titulo vacio');
+    if (identradapadre === 0 && (!titulo || titulo.trim().length === 0)) {
+      return error(res, 400, 'Las publicaciones principales requieren título');
     }
 
-    if (!cont || cont.length === 0) {
+    // Respuesta/comentario (identradapadre > 0) puede no tener título
+    // pero debe tener contenido válido
+    if (identradapadre > 0 && (!cont || cont.trim().length === 0)) {
       return error(res, 400, 'Contenido vacio');
     }
 
