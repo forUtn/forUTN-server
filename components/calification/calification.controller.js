@@ -33,6 +33,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    console.log(req.body);
     const { identrada, idusuario, tipoclasificacion } = req.body;
         
     const calificationExist = await Calification.findAll({
