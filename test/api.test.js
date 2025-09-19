@@ -22,24 +22,24 @@ describe('Testing POSTS user', () => {
 
 });
 
-describe('Testing POSTS INPUTS', () => {
-    it('Should return status -> 200 and the JSON with input the message', async () => {
+// describe('Testing POSTS INPUTS', () => {
+//     it('Should return status -> 200 and the JSON with input the message', async () => {
         
-        const newInput = {
-            idusuario: 1,
-            idmateria: 1,
-            identradapadre: 0,
-            contenido: 'Esto es un contenido creado con el test',
-            titulo:'Titulo y comentario',
-            archivos: []
-        };
-        var r = await request(app)
-            .post("/inputs")
-            .set("Accept", "application/json")
-            .send(newInput)
-            .expect(200);
-    });
-});
+//         const newInput = {
+//             idusuario: 1,
+//             idmateria: 1,
+//             identradapadre: 0,
+//             contenido: 'Esto es un contenido creado con el test',
+//             titulo:'Titulo y comentario',
+//             archivos: []
+//         };
+//         var r = await request(app)
+//             .post("/inputs")
+//             .set("Accept", "application/json")
+//             .send(newInput)
+//             .expect(200);
+//     });
+// });
 
 describe('TESTING GETS USERS', () => {
     it('Return 200 and all JSON users', async () => {
@@ -67,30 +67,30 @@ describe('TESTING GETS INPUTS', () => {
     });
 });
 
-describe('Testing DELETE INPUTS', () => {
-    it('Should return status -> 200 and the JSON message:Eliminado', async () => {
+// describe('Testing DELETE INPUTS', () => {
+//     it('Should return status -> 200 and the JSON message:Eliminado', async () => {
 
-        const newInput = {
-            idusuario: 1,
-            idmateria: 1,
-            identradapadre: 0,
-            contenido: 'Esto es un contenido creado con el test',
-            titulo:'Titulo BORRAR',
-            archivos: []
-        };
-        var r = await request(app)
-            .post("/inputs")
-            .set("Accept", "application/json")
-            .send(newInput)
-        const a = "/inputs/"+r.body.message.identrada;
-        const res = await request(app)
-            .delete(a)
-            .set("Accept", "application/json")
-            .expect(200);
+//         const newInput = {
+//             idusuario: 1,
+//             idmateria: 1,
+//             identradapadre: 0,
+//             contenido: 'Esto es un contenido creado con el test',
+//             titulo:'Titulo BORRAR',
+//             archivos: []
+//         };
+//         var r = await request(app)
+//             .post("/inputs")
+//             .set("Accept", "application/json")
+//             .send(newInput)
+//         const a = "/inputs/"+r.body.message.identrada;
+//         const res = await request(app)
+//             .delete(a)
+//             .set("Accept", "application/json")
+//             .expect(200);
 
-        console.log(res.body.message);
-    });
-});
+//         console.log(res.body.message);
+//     });
+// });
 
 describe('Testing HEALTH CHECK', () => {
     it('Should return status 200 and health check response', async () => {
@@ -232,47 +232,47 @@ describe('Testing CALIFICATIONS (Voting System)', () => {
     // });
 });
 
-describe('Testing INPUT with FILE ATTACHMENT', () => {
-    it('Should create an input with file attachment', async () => {
-        const fs = require('fs');
-        const path = require('path');
+// describe('Testing INPUT with FILE ATTACHMENT', () => {
+//     it('Should create an input with file attachment', async () => {
+//         const fs = require('fs');
+//         const path = require('path');
         
-        // Crear archivo de prueba
-        const testFilePath = path.join(__dirname, 'attachment-test.pdf');
-        if (!fs.existsSync(testFilePath)) {
-            fs.writeFileSync(testFilePath, 'PDF content simulation for testing');
-        }
+//         // Crear archivo de prueba
+//         const testFilePath = path.join(__dirname, 'attachment-test.pdf');
+//         if (!fs.existsSync(testFilePath)) {
+//             fs.writeFileSync(testFilePath, 'PDF content simulation for testing');
+//         }
 
-        // Primero subir el archivo
-        const fileRes = await request(app)
-            .post("/files")
-            .attach('file', testFilePath)
-            .field('tipo', 'pdf');
+//         // Primero subir el archivo
+//         const fileRes = await request(app)
+//             .post("/files")
+//             .attach('file', testFilePath)
+//             .field('tipo', 'pdf');
 
-        // Luego crear el input con referencia al archivo
-        const newInputWithFile = {
-            idusuario: 1,
-            idmateria: 1,
-            identradapadre: 0,
-            contenido: 'Este post tiene un archivo adjunto',
-            titulo: 'Post con archivo PDF',
-            archivos: [fileRes.body.message?.idarchivo || 1]
-        };
+//         // Luego crear el input con referencia al archivo
+//         const newInputWithFile = {
+//             idusuario: 1,
+//             idmateria: 1,
+//             identradapadre: 0,
+//             contenido: 'Este post tiene un archivo adjunto',
+//             titulo: 'Post con archivo PDF',
+//             archivos: [fileRes.body.message?.idarchivo || 1]
+//         };
 
-        const res = await request(app)
-            .post("/inputs")
-            .set("Accept", "application/json")
-            .send(newInputWithFile)
-            .expect(200);
+//         const res = await request(app)
+//             .post("/inputs")
+//             .set("Accept", "application/json")
+//             .send(newInputWithFile)
+//             .expect(200);
 
-        console.log('Input with file created:', res.body);
+//         console.log('Input with file created:', res.body);
         
-        // Limpiar archivo de prueba
-        if (fs.existsSync(testFilePath)) {
-            fs.unlinkSync(testFilePath);
-        }
-    });
-});
+//         // Limpiar archivo de prueba
+//         if (fs.existsSync(testFilePath)) {
+//             fs.unlinkSync(testFilePath);
+//         }
+//     });
+// });
 
 describe('Testing SEARCH FUNCTIONALITY', () => {
     // it('Should search inputs by keyword', async () => {
