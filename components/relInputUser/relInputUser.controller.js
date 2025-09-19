@@ -1,20 +1,17 @@
 const router = require('express').Router();
-const {Sequelize, QueryTypes, Op} = require('sequelize');
-
-
+const error = require('../../bin/error');
 const {
-    RelInputUser
-} = require('../../database')
+  RelInputUser
+} = require('../../database');
 
 
 router.get('/', async (req, res) => {
-    try {
-        console.log("RelInputUser");
-        const profileRoutes = await RelInputUser.findAll(); 
-        res.status(200).json(profileRoutes);  
-    } catch (error) {
-        console.log("Error en el GET RelInputUser", error);
-    }
+  try {
+    const profileRoutes = await RelInputUser.findAll(); 
+    res.status(200).json(profileRoutes);  
+  } catch (err) {
+    error(res, 400, 'Error en el GET REL INPUT USER', err);
+  }
 });
 
 

@@ -1,0 +1,47 @@
+{
+  "env": {
+    "node": true,
+    "es2022": true
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "rules": {
+    // 1. Prohibir variables no utilizadas
+    "no-unused-vars": ["error", { 
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_" 
+    }],
+    
+    // 2. Requerir punto y coma al final de las declaraciones
+    "semi": ["error", "always"],
+    
+    // 3. Usar comillas simples consistentemente
+    "quotes": ["error", "single"],
+    
+    // 4. Prohibir console.log en producción (advertencia)
+    "no-console": "warn",
+    
+    // 5. Requerir espacios consistentes en objetos
+    "object-curly-spacing": ["error", "always"],
+    
+    // 6. Prohibir trailing commas innecesarias
+    "comma-dangle": ["error", "never"],
+    
+    // 7. Requerir indentación consistente (2 espacios)
+    "indent": ["error", 2],
+    
+    // 8. Prohibir variables redeclaradas
+    "no-redeclare": "error",
+    
+    // 9. Requerir uso de === en lugar de ==
+    "eqeqeq": ["error", "always"],
+    
+    // 10. Prohibir código inalcanzable
+    "no-unreachable": "error"
+  }
+}

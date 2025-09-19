@@ -1,20 +1,19 @@
 const router = require('express').Router();
-const {Sequelize, QueryTypes, Op} = require('sequelize');
 
 
+const error = require('../../bin/error');
 const {
-    ProfileRoute
-} = require('../../database')
+  ProfileRoute
+} = require('../../database');
 
 
 router.get('/', async (req, res) => {
-    try {
-        console.log("ProfileRoute");
-        const profileRoutes = await ProfileRoute.findAll(); 
-        res.status(200).json(profileRoutes);  
-    } catch (error) {
-        console.log("Error en el GET ProfileRoute", error);
-    }
+  try {
+    const profileRoutes = await ProfileRoute.findAll(); 
+    res.status(200).json(profileRoutes);  
+  } catch (err) {
+    error(res, 400, 'Error en el GET PROFILE ROUTE', err);
+  }
 });
 
 

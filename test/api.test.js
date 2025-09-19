@@ -1,24 +1,24 @@
-const request = require("supertest");
-const app = require("../app");
+const request = require('supertest');
+const app = require('../app');
 const { expect } = require('chai');
 
 
 describe('Testing POSTS user', () => {
-    it('Should return status -> 200 and the JSON with user created', async () => {
-        const newUser = {
-            idcarrera : 1,
-            username : 'Valentin Morali',
-            mail: 'moralivalenti@gmail.com',
-            pwd: 'estaesunacontrasenia'
-        };
-        const r = await request(app)
-            .post("/users")
-            .set("Accept", "application/json")
-            .send(newUser)
-            .expect(200);
+  it('Should return status -> 200 and the JSON with user created', async () => {
+    const newUser = {
+      idcarrera : 1,
+      username : 'Valentin Morali',
+      mail: 'moralivalenti@gmail.com',
+      pwd: 'estaesunacontrasenia'
+    };
+    const r = await request(app)
+      .post('/users')
+      .set('Accept', 'application/json')
+      .send(newUser)
+      .expect(200);
 
-        console.log(r.body);
-    });
+    console.log(r.body);
+  });
 
 });
 
@@ -42,29 +42,29 @@ describe('Testing POSTS user', () => {
 // });
 
 describe('TESTING GETS USERS', () => {
-    it('Return 200 and all JSON users', async () => {
-        await request(app).get("/users").expect(200);
-    });
+  it('Return 200 and all JSON users', async () => {
+    await request(app).get('/users').expect(200);
+  });
 
-    it('Return 200 and the user with idusuario = 1', async () => {
-        const r = await request(app).get("/users/1").expect(200);
-        console.log(r.body.message);
-    });
+  it('Return 200 and the user with idusuario = 1', async () => {
+    const r = await request(app).get('/users/1').expect(200);
+    console.log(r.body.message);
+  });
 
-    it('Return 404 because not found a user', async () => {
-        await request(app).get("/users/9999").expect(404);
-    });
+  it('Return 404 because not found a user', async () => {
+    await request(app).get('/users/9999').expect(404);
+  });
 });
 
 
 describe('TESTING GETS INPUTS', () => {
-    it('Return 200 and the JSON with all inputs created at the moment', async () => {
-        await request(app).get("/inputs").expect(200);
-    });
+  it('Return 200 and the JSON with all inputs created at the moment', async () => {
+    await request(app).get('/inputs').expect(200);
+  });
     
-    it('should show the input with id = 1', async () => {
-        await request(app).get("/inputs/1").expect(200);
-    });
+  it('should show the input with id = 1', async () => {
+    await request(app).get('/inputs/1').expect(200);
+  });
 });
 
 // describe('Testing DELETE INPUTS', () => {
@@ -93,59 +93,59 @@ describe('TESTING GETS INPUTS', () => {
 // });
 
 describe('Testing HEALTH CHECK', () => {
-    it('Should return status 200 and health check response', async () => {
-        const res = await request(app)
-            .get("/health")
-            .expect(200);
+  it('Should return status 200 and health check response', async () => {
+    const res = await request(app)
+      .get('/health')
+      .expect(200);
         
-        console.log('Health check response:', res.body);
-        expect(res.body.success).to.be.true;
-        expect(res.body.message).to.include('ForUTN Server is running');
-    });
+    console.log('Health check response:', res.body);
+    expect(res.body.success).to.be.true;
+    expect(res.body.message).to.include('ForUTN Server is running');
+  });
 });
 
 describe('Testing FILE UPLOADS', () => {
-    it('Should upload a file successfully', async () => {
-        const fs = require('fs');
-        const path = require('path');
+  it('Should upload a file successfully', async () => {
+    const fs = require('fs');
+    const path = require('path');
         
-        // Crear un archivo de prueba temporal si no existe
-        const testFilePath = path.join(__dirname, 'test-file.txt');
-        if (!fs.existsSync(testFilePath)) {
-            fs.writeFileSync(testFilePath, 'Este es un archivo de prueba para testing');
-        }
+    // Crear un archivo de prueba temporal si no existe
+    const testFilePath = path.join(__dirname, 'test-file.txt');
+    if (!fs.existsSync(testFilePath)) {
+      fs.writeFileSync(testFilePath, 'Este es un archivo de prueba para testing');
+    }
 
-        const res = await request(app)
-            .post("/files/upload")
-            .attach('file', testFilePath)
-            .field('tipo', 'test')
-            .expect(200);
+    const res = await request(app)
+      .post('/files/upload')
+      .attach('file', testFilePath)
+      .field('tipo', 'test')
+      .expect(200);
 
-        console.log('File upload response:', res.body);
+    console.log('File upload response:', res.body);
         
-        // Limpiar archivo de prueba
-        if (fs.existsSync(testFilePath)) {
-            fs.unlinkSync(testFilePath);
-        }
-    });
+    // Limpiar archivo de prueba
+    if (fs.existsSync(testFilePath)) {
+      fs.unlinkSync(testFilePath);
+    }
+  });
 });
 
 describe('Testing CAREERS', () => {
-    it('Should get all careers', async () => {
-        const res = await request(app)
-            .get("/careers")
-            .expect(200);
+  it('Should get all careers', async () => {
+    const res = await request(app)
+      .get('/careers')
+      .expect(200);
         
-        console.log('Careers list:', res.body);
-    });
+    console.log('Careers list:', res.body);
+  });
 
-    it.skip('Should get career by ID', async () => {
-        const res = await request(app)
-            .get("/careers/1")
-            .expect(200);
+  it.skip('Should get career by ID', async () => {
+    const res = await request(app)
+      .get('/careers/1')
+      .expect(200);
         
-        console.log('Career by ID:', res.body);
-    });
+    console.log('Career by ID:', res.body);
+  });
 });
 
 // describe('Testing SUBJECTS', () => {
@@ -191,45 +191,45 @@ describe('Testing CAREERS', () => {
 // });
 
 describe('Testing CALIFICATIONS (Voting System)', () => {
-    it('Should create a new calification/vote', async () => {
-        const newCalification = {
-            idusuario: 1,
-            identrada: 1,
-            tipoclasificacion: 'upvote'
-        };
+  it('Should create a new calification/vote', async () => {
+    const newCalification = {
+      idusuario: 1,
+      identrada: 1,
+      tipoclasificacion: 'upvote'
+    };
 
-        const res = await request(app)
-            .post("/califications")
-            .set("Accept", "application/json")
-            .send(newCalification)
-            .expect(200);
+    const res = await request(app)
+      .post('/califications')
+      .set('Accept', 'application/json')
+      .send(newCalification)
+      .expect(200);
 
-        console.log('Calification created:', res.body);
-    });
+    console.log('Calification created:', res.body);
+  });
 
-    it('Should get all califications', async () => {
-        const res = await request(app)
-            .get("/califications")
-            .expect(200);
+  it('Should get all califications', async () => {
+    const res = await request(app)
+      .get('/califications')
+      .expect(200);
         
-        console.log('Califications list:', res.body);
-    });
+    console.log('Califications list:', res.body);
+  });
 
-    // it('Should update a calification from upvote to downvote', async () => {
-    //     const updatedCalification = {
-    //         idusuario: 1,
-    //         identrada: 1,
-    //         tipoclasificacion: 'downvote'
-    //     };
+  // it('Should update a calification from upvote to downvote', async () => {
+  //     const updatedCalification = {
+  //         idusuario: 1,
+  //         identrada: 1,
+  //         tipoclasificacion: 'downvote'
+  //     };
 
-    //     const res = await request(app)
-    //         .put("/califications/1")
-    //         .set("Accept", "application/json")
-    //         .send(updatedCalification)
-    //         .expect(200);
+  //     const res = await request(app)
+  //         .put("/califications/1")
+  //         .set("Accept", "application/json")
+  //         .send(updatedCalification)
+  //         .expect(200);
 
-    //     console.log('Calification updated:', res.body);
-    // });
+  //     console.log('Calification updated:', res.body);
+  // });
 });
 
 // describe('Testing INPUT with FILE ATTACHMENT', () => {
@@ -275,21 +275,21 @@ describe('Testing CALIFICATIONS (Voting System)', () => {
 // });
 
 describe('Testing SEARCH FUNCTIONALITY', () => {
-    // it('Should search inputs by keyword', async () => {
-    //     const searchTerm = 'contenido';
-    //     const res = await request(app)
-    //         .get(`/inputs/search/${searchTerm}`)
-    //         .expect(200);
+  // it('Should search inputs by keyword', async () => {
+  //     const searchTerm = 'contenido';
+  //     const res = await request(app)
+  //         .get(`/inputs/search/${searchTerm}`)
+  //         .expect(200);
         
-    //     console.log('Search results:', res.body);
-    // });
+  //     console.log('Search results:', res.body);
+  // });
 
-    // it('Should return empty results for non-existent search term', async () => {
-    //     const searchTerm = 'palabrainexistente123';
-    //     const res = await request(app)
-    //         .get(`/inputs/search/${searchTerm}`)
-    //         .expect(200);
+  // it('Should return empty results for non-existent search term', async () => {
+  //     const searchTerm = 'palabrainexistente123';
+  //     const res = await request(app)
+  //         .get(`/inputs/search/${searchTerm}`)
+  //         .expect(200);
         
-    //     console.log('Empty search results:', res.body);
-    // });
+  //     console.log('Empty search results:', res.body);
+  // });
 });

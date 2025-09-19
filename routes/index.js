@@ -29,23 +29,23 @@ router.use('/subjects', subjectController);
 
 // Health Check endpoint
 router.get('/health', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'ForUTN Server is running',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        version: '1.0.0'
-    });
+  res.status(200).json({
+    success: true,
+    message: 'ForUTN Server is running',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    version: '1.0.0'
+  });
 });
 
 router.get('/', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Welcome to the ForUTN API',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        version: '1.0.0'
-    });
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to the ForUTN API',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    version: '1.0.0'
+  });
 });
 
 module.exports = router;

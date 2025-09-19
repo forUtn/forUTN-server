@@ -3,15 +3,15 @@ const constants = require('../constants');
 
 //Stablish conecction
 const sequelize = new Sequelize(
-    `postgres://${constants.DB_USER}:${constants.DB_PWD}@${constants.DB_HOST}:${constants.DB_PORT}/${constants.DB_DBNAME}`,
-    {
-        dialectOptions: {
-            ssl: {
-                require: true,
-                rejectUnauthorized: false
-            }
-        }
+  `postgres://${constants.DB_USER}:${constants.DB_PWD}@${constants.DB_HOST}:${constants.DB_PORT}/${constants.DB_DBNAME}`,
+  {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
     }
+  }
 );
 
 
@@ -41,22 +41,22 @@ const ProfileRoute = ProfileRouteModel(sequelize, Sequelize);
 const RelInputUser = RelInputUserModel(sequelize, Sequelize);
 const Subject = SubjectModel(sequelize, Sequelize);
 
-sequelize.sync({ force : false}).then(() => {
-    console.log("*----------------------Tablas sincronizadas------------------------*");
+sequelize.sync({ force : false }).then(() => {
+  console.log('*----------------------Tablas sincronizadas------------------------*');
 });
 
 
 module.exports = {
-    sequelize,
-    User,
-    Calification,
-    Career,
-    File,
-    Input,
-    Log,
-    Parameter,
-    Profile,
-    ProfileRoute,
-    RelInputUser,
-    Subject
-}
+  sequelize,
+  User,
+  Calification,
+  Career,
+  File,
+  Input,
+  Log,
+  Parameter,
+  Profile,
+  ProfileRoute,
+  RelInputUser,
+  Subject
+};
