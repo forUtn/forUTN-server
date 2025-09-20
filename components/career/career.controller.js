@@ -18,7 +18,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    var career = await Career.findByPk(req.params.id);
+    var id = parseInt(req.params.id) + 1;
+    var career = await Career.findByPk(id);
     if(career) {
       const subjects = await Subject.findAll({
         where: {
@@ -26,11 +27,11 @@ router.get('/:id', async (req, res) => {
         }
       });
             
-      var primerAnio = subjects.filter(materia => materia.anio === 1);
-      var segundoAnio = subjects.filter(materia => materia.anio === 2); 
-      var tercerAnio = subjects.filter(materia => materia.anio === 3);
-      var cuartoAnio = subjects.filter(materia => materia.anio === 4);
-      var quintoAnio = subjects.filter(materia => materia.anio === 5);
+      var primerAnio = subjects.filter(materia => parseInt(materia.anio) === 1);
+      var segundoAnio = subjects.filter(materia => parseInt(materia.anio) === 2); 
+      var tercerAnio = subjects.filter(materia => parseInt(materia.anio) === 3);
+      var cuartoAnio = subjects.filter(materia => parseInt(materia.anio) === 4);
+      var quintoAnio = subjects.filter(materia => parseInt(materia.anio) === 5);
       var anios = [primerAnio, segundoAnio, tercerAnio, cuartoAnio, quintoAnio];
       res.status(200).json({ response:'OK', career, anios });
     }

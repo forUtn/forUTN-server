@@ -21,12 +21,12 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    var inputs = await Input.findByPk(req.params.id);
+    var inputs = await Input.findByPk(parseInt(req.params.id));
     let coments = [];
     let url;
     if (inputs) {
       const op = await User.findByPk(inputs.idusuario);
-      if (inputs.identradapadre === 0) {
+      if (parseInt(inputs.identradapadre) === 0) {
         const comentarios = await Input.findAll({
           attributes: ['contenido', 'idusuario', 'identrada'],
           where: {
@@ -90,6 +90,21 @@ router.post('/', async (req, res) => {
   try {
     const { identradapadre = 0, idusuario, idmateria, cont, titulo, archivoPdf } = req.body;
 
+    if (archivoPdf && archivoPdf.trim() !== '') {
+      const archivoBase64 = archivoPdf;
+                
+      const sizeInBytes = Buffer.byteLength(archivoBase64, 'base64');
+      const sizeInMB = sizeInBytes / (1024 * 1024);
+                
+      if (sizeInMB > 2) {
+        return res.status(400).json({
+          response: 'ERROR',
+          message: `Archivo excede el límite de 2MB. Tamaño actual: ${sizeInMB.toFixed(2)}MB`
+        });
+      }
+    }
+
+
     if (identradapadre === 0 && (!titulo || titulo.trim().length === 0)) {
       return error(res, 400, 'Las publicaciones principales requieren título');
     }
@@ -100,7 +115,7 @@ router.post('/', async (req, res) => {
       return error(res, 400, 'Contenido vacio');
     }
 
-    if (cont.length > 4000) {
+    if (cont.trim().length > 4000) {
       return error(res, 400, 'El cuerpo de la publicacion excede el limite de la longitud');
     }
 
