@@ -63,7 +63,7 @@ describe('TESTING GETS INPUTS', () => {
   });
     
   it('should show the input with id = 1', async () => {
-    await request(app).get('/inputs/1').expect(200);
+    await request(app).get('/inputs/3').expect(200);
   });
 });
 
