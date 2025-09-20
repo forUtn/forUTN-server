@@ -90,6 +90,22 @@ router.post('/', async (req, res) => {
   try {
     const { identradapadre = 0, idusuario, idmateria, cont, titulo, archivoPdf } = req.body;
 
+    if (archivoPdf && archivoPdf.length > 0) {
+      const archivoBase64 = archivoPdf;
+                
+      // Validar tamaño del base64
+      const sizeInBytes = Buffer.byteLength(archivoBase64, 'base64');
+      const sizeInMB = sizeInBytes / (1024 * 1024);
+                
+      if (sizeInMB > 2) {
+        return res.status(400).json({
+          response: 'ERROR',
+          message: `Archivo excede el límite de 2MB. Tamaño actual: ${sizeInMB.toFixed(2)}MB`
+        });
+      }
+    }
+
+
     if (identradapadre === 0 && (!titulo || titulo.trim().length === 0)) {
       return error(res, 400, 'Las publicaciones principales requieren título');
     }
