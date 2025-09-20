@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    var inputs = await Input.findByPk(req.params.id);
+    var inputs = await Input.findByPk(parseInt(req.params.id));
     let coments = [];
     let url;
     if (inputs) {
