@@ -89,7 +89,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { identradapadre = 0, idusuario, idmateria, cont, titulo, archivoPdf } = req.body;
-    
+
     if (archivoPdf && archivoPdf.trim() !== '') {
       const archivoBase64 = archivoPdf;
                 
@@ -115,7 +115,7 @@ router.post('/', async (req, res) => {
       return error(res, 400, 'Contenido vacio');
     }
 
-    if (cont.length > 4000) {
+    if (cont.trim().length > 4000) {
       return error(res, 400, 'El cuerpo de la publicacion excede el limite de la longitud');
     }
 
