@@ -80,9 +80,9 @@ router.get('/:id', async (req, res) => {
       }
       res.status(200).json({ response: 'OK', op: op.username, message: inputs, comentarios: coments, archivo: url });
     }
-    else error(res, 400, 'error en el get by id input');
+    else error(res, 400, 'No se encontro la publicacion');
   } catch (err) {
-    error(res, 400, 'Error en el get inputs by id', err);
+    error(res, 400, 'No se encontro la publicacion', err);
   }
 });
 
