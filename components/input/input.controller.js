@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
     let url;
     if (inputs) {
       const op = await User.findByPk(inputs.idusuario);
-      if (inputs.identradapadre === 0) {
+      if (parseInt(inputs.identradapadre) === 0) {
         const comentarios = await Input.findAll({
           attributes: ['contenido', 'idusuario', 'identrada'],
           where: {
