@@ -89,11 +89,10 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { identradapadre = 0, idusuario, idmateria, cont, titulo, archivoPdf } = req.body;
-
-    if (archivoPdf && archivoPdf.length > 0) {
+    
+    if (archivoPdf && archivoPdf.trim() !== '') {
       const archivoBase64 = archivoPdf;
                 
-      // Validar tamaño del base64
       const sizeInBytes = Buffer.byteLength(archivoBase64, 'base64');
       const sizeInMB = sizeInBytes / (1024 * 1024);
                 
