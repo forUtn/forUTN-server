@@ -80,15 +80,17 @@ router.get('/:id', async (req, res) => {
       }
       res.status(200).json({ response: 'OK', op: op.username, message: inputs, comentarios: coments, archivo: url });
     }
-    else error(res, 400, 'error en el get by id input');
+    else error(res, 400, 'No se encontro la publicacion');
   } catch (err) {
-    error(res, 400, 'Error en el get inputs by id', err);
+    error(res, 400, 'No se encontro la publicacion', err);
   }
 });
 
 router.post('/', async (req, res) => {
   try {
     const { identradapadre = 0, idusuario, idmateria, cont, titulo, archivoPdf } = req.body;
+
+    let tienepdf = false;
 
     if (archivoPdf && archivoPdf.trim() !== '') {
       const archivoBase64 = archivoPdf;
@@ -102,6 +104,7 @@ router.post('/', async (req, res) => {
           message: `Archivo excede el límite de 2MB. Tamaño actual: ${sizeInMB.toFixed(2)}MB`
         });
       }
+      tienepdf = true;
     }
 
 
@@ -138,7 +141,8 @@ router.post('/', async (req, res) => {
     });
     res.status(200).json({
       response: 'OK',
-      message: inputCreated
+      message: inputCreated,
+      tienepdf
     });
   } catch (e) {
     error(res, 400, 'error en el post input', e);
