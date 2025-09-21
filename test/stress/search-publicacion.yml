@@ -1,0 +1,24 @@
+config:
+  target: 'https://back-forutn-gsc4arh0bbera3cj.chilecentral-01.azurewebsites.net'
+  phases:
+    # Escalamiento gradual para encontrar límite de búsquedas
+    - duration: 60
+      arrivalRate: 5    # 5 búsquedas/seg
+    - duration: 60
+      arrivalRate: 10   # 10 búsquedas/seg
+    - duration: 60
+      arrivalRate: 15   # 15 búsquedas/seg
+    - duration: 60
+      arrivalRate: 25   # 25 búsquedas/seg
+    - duration: 60
+      arrivalRate: 40   # 40 búsquedas/seg
+    - duration: 60
+      arrivalRate: 60   # 60 búsquedas/seg - Buscar punto de quiebre
+
+scenarios:
+  - name: "Búsqueda intensiva de publicaciones"
+    flow:
+      - post:
+          url: "/inputs/search"
+          json:
+            texto: "{{ $randomPickInArray(['matematica', 'fisica', 'quimica', 'programacion', 'java', 'algoritmos', 'calculo', 'algebra', 'estadistica', 'sistemas', 'electrica', 'mecanica', 'ingenieria', 'proyecto', 'examen', 'parcial', 'teoria', 'practica', 'ejercicio', 'formula']) }}"

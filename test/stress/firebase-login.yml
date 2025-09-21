@@ -1,0 +1,19 @@
+config:
+  target: 'https://identitytoolkit.googleapis.com'
+  phases:
+    - duration: 60
+      arrivalRate: 5   # 5 logins/segundo
+    - duration: 60
+      arrivalRate: 10  # 10 logins concurrentes
+    - duration: 60
+      arrivalRate: 20  # Buscar límites de Firebase Auth
+
+scenarios:
+  - name: "Login concurrente Firebase"
+    flow:
+      - post:
+          url: "/v1/accounts:signInWithPassword?key=AIzaSyDz2BebiXEKdLGZPc6evD2ox4eWiknv42Y"
+          json:
+            email: "test{{ $randomNumber(1, 10) }}@frd.utn.edu.ar"
+            password: "password123"
+            returnSecureToken: true

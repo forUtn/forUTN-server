@@ -1,0 +1,24 @@
+config:
+  target: 'https://back-forutn-gsc4arh0bbera3cj.chilecentral-01.azurewebsites.net'
+  phases:
+    - duration: 60
+      arrivalRate: 5   # 5 comentarios simultáneos
+    - duration: 60
+      arrivalRate: 10  # 10 comentarios simultáneos
+    - duration: 60
+      arrivalRate: 20  # 20 comentarios simultáneos
+    - duration: 60
+      arrivalRate: 40  # Buscar punto de quiebre
+
+scenarios:
+  - name: "Crear interacciones rápidas"
+    flow:
+      - post:
+          url: "/inputs"
+          json:
+            idusuario: "{{ $randomNumber(1, 10) }}"
+            idmateria: "{{ $randomNumber(1, 5) }}"
+            identradapadre: "{{ $randomNumber(1, 50) }}"  # Responde a publicación existente
+            titulo: ""  # Los comentarios no tienen título
+            cont: "Respuesta rápida {{ $randomNumber(1, 1000) }} - tiempo {{ $timestamp }}"
+            archivos: []

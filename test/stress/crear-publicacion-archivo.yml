@@ -1,0 +1,30 @@
+config:
+  target: 'https://back-forutn-gsc4arh0bbera3cj.chilecentral-01.azurewebsites.net'
+  phases:
+    # Escalamiento gradual hasta encontrar el punto de quiebre
+    - duration: 60
+      arrivalRate: 5
+    - duration: 60  
+      arrivalRate: 10
+    - duration: 60
+      arrivalRate: 20
+    - duration: 60
+      arrivalRate: 40
+    - duration: 60
+      arrivalRate: 80
+    - duration: 60
+      arrivalRate: 150
+
+scenarios:
+  - name: "Crear publicación con archivo simulado"
+    flow:
+      - post:
+          url: "/inputs"
+          json:
+            idusuario: 3
+            idmateria: "{{ $randomNumber(1, 5) }}"
+            identradapadre: null
+            titulo: "Test stress"
+            cont: "Contenido de prueba con archivo grande"
+            # Simular archivo grande (cerca de 2MB en base64)
+            archivoPdf: "{{ $randomString(1500000) }}"

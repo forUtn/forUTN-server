@@ -1,0 +1,21 @@
+config:
+  target: 'https://back-forutn-gsc4arh0bbera3cj.chilecentral-01.azurewebsites.net'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+    - duration: 60
+      arrivalRate: 20
+    - duration: 60
+      arrivalRate: 40
+    - duration: 60
+      arrivalRate: 80
+
+scenarios:
+  - name: "Test calificaciones stress"
+    flow:
+      - post:
+          url: "/califications"
+          json:
+            identrada: "{{ $randomNumber(1, 50) }}"
+            idusuario: "{{ $randomNumber(1, 20) }}"
+            tipoclasificacion: "U"
