@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    var id = parseInt(req.params.id) + 1;
+    var id = parseInt(req.params.id);
     var career = await Career.findByPk(id);
     if(career) {
       const subjects = await Subject.findAll({
